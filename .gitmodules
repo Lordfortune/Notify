@@ -1,0 +1,3 @@
+[submodule "FT.Common"]
+	path = FT.Common
+	url = git@git.assembla.com:4traders.ft_common.git
