@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Notify.Dal.Models;
-using Notify.Enums;
+using Notify.Common.Enums;
 
 namespace Notify.Dal.Repositories
 {

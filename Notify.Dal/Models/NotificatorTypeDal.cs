@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Notify.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+using Notify.Common.Enums;
 
 namespace Notify.Dal.Models
 {

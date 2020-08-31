@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Notify.Enums\Notify.Enums.csproj" />
+    <ProjectReference Include="..\Notify.Common\Notify.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

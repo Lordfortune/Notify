@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Notify.Dal.Mysql;
+using Notify.Dal.Repositories;
 
 namespace Notify.WebApi
 {
@@ -14,6 +15,10 @@ namespace Notify.WebApi
 				{
 					builder.MigrationsAssembly("Notify.Dal.MySql.Migrations");
 				}));
+
+			services
+				.AddScoped<INotificatorTypeRepository, NotificationTypeRepository>()
+				.AddScoped<INotificatorRepository, NotificatorRepository>();
 
 			return services;
 		}

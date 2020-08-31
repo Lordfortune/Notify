@@ -1,15 +1,15 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Notify.Dal.Models;
 using Notify.Dal.Repositories;
-using Notify.Enums;
+using Notify.Common.Enums;
 
 namespace Notify.Dal.Mysql
 {
 	public class NotificationTypeRepository : BaseRepository, INotificatorTypeRepository
 	{
-		protected NotificationTypeRepository(NotifyDbContext context) : base(context)
+		public NotificationTypeRepository(NotifyDbContext context) : base(context)
 		{
 		}
 

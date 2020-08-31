@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Notify.Dal.Models;
-using Notify.Enums;
+using Notify.Common.Enums;
 
 namespace Notify.Dal.Mysql
 {
