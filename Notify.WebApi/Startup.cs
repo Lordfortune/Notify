@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Notify.Bll;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Notify.WebApi
 {
@@ -19,12 +20,14 @@ namespace Notify.WebApi
 		}
 
 		public IConfiguration Configuration { get; }
+		public ILifetimeScope AutofacContainer { get; private set; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services)
+		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
+
 			services
-				.ConfigureIoC(Configuration)
+				.ConfigureDatabase(Configuration)
 				.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 					{
 						builder
@@ -46,8 +49,15 @@ namespace Notify.WebApi
 				};
 			});
 
-			services.AddSingleton<NotifyListenersManager>();
-			services.AddHostedService<NotifyListenersManager>();
+			services.AddOptions();
+
+			var builder = new ContainerBuilder();
+			builder.Populate(services);
+			builder.ConfigureIoC(Configuration);
+
+			AutofacContainer = builder.Build();
+
+			return new AutofacServiceProvider(AutofacContainer);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

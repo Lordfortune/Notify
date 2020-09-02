@@ -1,15 +1,20 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notify.Dal.Models
 {
-	[Table("TelegramNotificatorSettings")]
-	public class TelegramNotificatorSettingsDal
+	[Table("Persons")]
+	public class PersonDal
 	{
-		[Column("Id")]
+		[Column("Id"), Key]
 		public int Id { get; set; }
-		[Column("Token")]
-		public string Token { get; set; }
+		[Column("FirstName")]
+		public string FirstName { get; set; }
+		[Column("LastName")]
+		public string LastName { get; set; }
+		[Column("MiddleName")]
+		public string MiddleName { get; set; }
 
 		[Column("IsActive")]
 		public bool IsActive { get; set; }
@@ -18,7 +23,5 @@ namespace Notify.Dal.Models
 		public DateTime CreatedAt { get; set; }
 		[Column("UpdatedAt")]
 		public DateTime UpdatedAt { get; set; }
-
-		public TelegramNotificatorDal Notificator { get; set; }
 	}
 }

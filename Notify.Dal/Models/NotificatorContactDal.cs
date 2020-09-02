@@ -1,21 +1,18 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Notify.Common.Enums;
 
 namespace Notify.Dal.Models
 {
-	[Table("Notificators")]
-	public abstract class NotificatorDal
+	[Table("NotificatorContacts")]
+	public class NotificatorContactDal
 	{
-		[Column("Id")]
+		[Column("Id"), Key]
 		public int Id { get; set; }
-		[Column("Name")]
-		public string Name { get; set; }
-		[Column("Slug")]
-		public string Slug { get; set; }
-		[Column("TypeId")]
-		public NotificationTypeEnum TypeId { get; set; }
+		[Column("ContactId")]
+		public int ContactId { get; set; }
+		[Column("NotificatorId")]
+		public int NotificatorId { get; set; }
 
 		[Column("IsActive")]
 		public bool IsActive { get; set; }
@@ -24,5 +21,8 @@ namespace Notify.Dal.Models
 		public DateTime CreatedAt { get; set; }
 		[Column("UpdatedAt")]
 		public DateTime UpdatedAt { get; set; }
+
+		public ContactDal Contact { get; set; }
+		public NotificatorDal Notificator { get; set; }
 	}
 }

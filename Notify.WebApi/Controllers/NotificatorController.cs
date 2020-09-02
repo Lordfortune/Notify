@@ -29,10 +29,11 @@ namespace Notify.WebApi.Controllers
 		}
 
 		[HttpPost("send")]
-		public Task<NotificatorDal> Send(SendMessageDto request)
+		public async Task<NotificatorDal> Send(SendMessageDto request)
 		{
 			_manager.Send(request);
-			return _repository.Get(request.NotificatorId);
+			var notificator = await _repository.Get(request.NotificatorId);
+			return notificator;
 		}
 	}
 }

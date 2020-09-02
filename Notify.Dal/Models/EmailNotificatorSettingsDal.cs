@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notify.Dal.Models
 {
@@ -21,6 +22,14 @@ namespace Notify.Dal.Models
 		public string SenderAddress { get; set; }
 		[Column("DefaultSubject")]
 		public string DefaultSubject { get; set; }
+
+		[Column("IsActive")]
+		public bool IsActive { get; set; }
+
+		[Column("CreatedAt")]
+		public DateTime CreatedAt { get; set; }
+		[Column("UpdatedAt")]
+		public DateTime UpdatedAt { get; set; }
 
 		public EmailNotificatorDal Notificator { get; set; }
 	}

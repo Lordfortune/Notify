@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using Autofac.Extensions.DependencyInjection;
 using FT.Extending;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +34,8 @@ namespace Notify.WebApi
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 			 WebHost.CreateDefaultBuilder(args)
-				  .UseStartup<Startup>();
+				 .ConfigureServices(services => services.AddAutofac())
+				 .UseContentRoot(Directory.GetCurrentDirectory())
+				 .UseStartup<Startup>();
 	}
 }
