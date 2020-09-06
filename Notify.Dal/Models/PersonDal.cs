@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,5 +24,7 @@ namespace Notify.Dal.Models
 		public DateTime CreatedAt { get; set; }
 		[Column("UpdatedAt")]
 		public DateTime UpdatedAt { get; set; }
+
+		public List<ContactDal> Contacts { get; set; }
 	}
 }

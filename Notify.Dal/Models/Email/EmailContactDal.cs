@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Notify.Dal.Models
+namespace Notify.Dal.Models.Email
 {
 	public class EmailContactDal : ContactDal
 	{

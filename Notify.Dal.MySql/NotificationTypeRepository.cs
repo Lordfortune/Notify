@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Notify.Dal.Models;
@@ -18,29 +16,14 @@ namespace Notify.Dal.Mysql
 		{
 		}
 
-		public Task<NotificatorTypeDal[]> GetAll()
+		public Task<NotificationTypeDal[]> GetAll()
 		{
-			return InContext(c => c.NotificatorTypes.ToArrayAsync());
+			return InContext(c => c.NotificationTypes.ToArrayAsync());
 		}
 
-		public Task<NotificatorTypeDal[]> GetList(string nameFilter)
+		public Task<NotificationTypeDal> Get(NotificationTypeEnum id)
 		{
-			return InContext(c => c.NotificatorTypes.Where(x => x.Name.Contains(nameFilter)).ToArrayAsync());
-		}
-
-		public Task<NotificatorTypeDal> Get(NotificationTypeEnum id)
-		{
-			return InContext(c => c.NotificatorTypes.FirstOrDefaultAsync(x => x.Id == id));
-		}
-
-		public Task<NotificatorTypeDal> GetBySlug(string slug)
-		{
-			return InContext(c => c.NotificatorTypes.FirstOrDefaultAsync(x => x.Slug == slug));
-		}
-
-		public Task<NotificatorTypeDal> GetByName(string name)
-		{
-			return InContext(c => c.NotificatorTypes.FirstOrDefaultAsync(x => x.Name == name));
+			return InContext(c => c.NotificationTypes.FirstOrDefaultAsync(x => x.Id == id));
 		}
 	}
 }

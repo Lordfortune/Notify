@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Notify.Bll.Notificators;
 using Notify.Dal.Models;
+using Notify.Dal.Models.Email;
+using Notify.Dal.Models.Telegram;
 
 namespace Notify.Bll.Mappers
 {

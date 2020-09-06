@@ -17,7 +17,7 @@ namespace Notify.WebApi.Controllers
 		private readonly INotificatorTypeRepository _repository;
 
 		[HttpGet("list")]
-		public Task<NotificatorTypeDal[]> GetAll()
+		public Task<NotificationTypeDal[]> GetAll()
 		{
 			return _repository.GetAll();
 		}

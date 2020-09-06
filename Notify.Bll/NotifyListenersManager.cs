@@ -21,13 +21,12 @@ namespace Notify.Bll
 			_serviceProvider = serviceProvider;
 		}
 
-		private readonly Guid Id  = Guid.NewGuid();
 		private readonly IServiceProvider _serviceProvider;
 		private readonly INotificatorTypeRepository _repository;
 
 		public void Send(SendMessageDto request)
 		{
-			Console.WriteLine($"NotifyListenersManager.Send {Id}, {request.NotificatorId}, {request.Message}");
+			Console.WriteLine($"NotifyListenersManager.Send, {request.NotificatorId}, {request.Message}");
 
 			using var scope = _serviceProvider.CreateScope();
 			var repo = scope.ServiceProvider.GetService<INotificatorTypeRepository>();

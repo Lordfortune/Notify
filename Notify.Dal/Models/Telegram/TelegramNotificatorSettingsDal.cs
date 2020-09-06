@@ -1,12 +1,13 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Notify.Dal.Models
+namespace Notify.Dal.Models.Telegram
 {
 	[Table("TelegramNotificatorSettings")]
 	public class TelegramNotificatorSettingsDal
 	{
-		[Column("Id")]
+		[Column("Id"), Key]
 		public int Id { get; set; }
 		[Column("Token")]
 		public string Token { get; set; }

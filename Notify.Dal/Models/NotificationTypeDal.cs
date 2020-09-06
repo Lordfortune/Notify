@@ -5,18 +5,18 @@ using Notify.Common.Enums;
 
 namespace Notify.Dal.Models
 {
-	[Table("NotificationStatuses")]
-	public class NotificationStatusDal
+	[Table("NotificationTypes")]
+	public class NotificationTypeDal
 	{
 		[Column("Id"), Key]
-		public NotificationStatusEnum Id { get; set; }
+		public NotificationTypeEnum Id { get; set; }
 		[Column("Name")]
 		public string Name { get; set; }
 		[Column("Slug")]
 		public string Slug { get; set; }
-		[Column("Description")]
-		public string Description { get; set; }
 
+		public List<ContactDal> Contacts { get; set; }
+		public List<NotificatorDal> Notificators { get; set; }
 		public List<NotificationDal> Notifications { get; set; }
 	}
 }

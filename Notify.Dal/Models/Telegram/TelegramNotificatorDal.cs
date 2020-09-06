@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Notify.Dal.Models
+namespace Notify.Dal.Models.Telegram
 {
 	public class TelegramNotificatorDal : NotificatorDal
 	{

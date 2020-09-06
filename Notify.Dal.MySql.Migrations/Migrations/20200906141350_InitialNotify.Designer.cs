@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Notify.Common.Enums;
 using Notify.Dal.Mysql;
@@ -9,9 +10,10 @@ using Notify.Dal.Mysql;
 namespace Notify.Dal.MySql.Migrations.Migrations
 {
     [DbContext(typeof(NotifyDbContext))]
-    partial class NotifyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200906141350_InitialNotify")]
+    partial class InitialNotify
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

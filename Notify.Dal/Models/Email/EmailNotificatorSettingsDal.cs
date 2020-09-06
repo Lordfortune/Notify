@@ -1,12 +1,13 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Notify.Dal.Models
+namespace Notify.Dal.Models.Email
 {
 	[Table("EmailNotificatorSettings")]
 	public class EmailNotificatorSettingsDal
 	{
-		[Column("Id")]
+		[Column("Id"), Key]
 		public int Id { get; set; }
 		[Column("Port")]
 		public int Port { get; set; }

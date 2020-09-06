@@ -6,7 +6,7 @@ using Notify.Common.Enums;
 namespace Notify.Dal.Models
 {
 	[Table("Notifications")]
-	public class NotificationDal
+	public abstract class NotificationDal
 	{
 		[Column("Id"), Key]
 		public int Id { get; set; }
@@ -17,6 +17,8 @@ namespace Notify.Dal.Models
 		public string Subject { get; set; }
 		[Column("Message")]
 		public string Message { get; set; }
+		[Column("TypeId")]
+		public NotificationTypeEnum TypeId { get; set; }
 		[Column("StatusId")]
 		public NotificationStatusEnum StatusId { get; set; }
 
@@ -26,6 +28,7 @@ namespace Notify.Dal.Models
 		[Column("UpdatedAt")]
 		public DateTime UpdatedAt { get; set; }
 
+		public NotificationTypeDal Type { get; set; }
 		public NotificationStatusDal Status { get; set; }
 		public NotificatorContactDal NotificatorContact { get; set; }
 	}

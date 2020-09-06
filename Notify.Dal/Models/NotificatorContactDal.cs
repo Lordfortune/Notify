@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,5 +25,6 @@ namespace Notify.Dal.Models
 
 		public ContactDal Contact { get; set; }
 		public NotificatorDal Notificator { get; set; }
+		public List<NotificationDal> Notifications { get; set; }
 	}
 }
