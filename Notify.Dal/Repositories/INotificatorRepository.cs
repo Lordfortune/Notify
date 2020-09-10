@@ -9,8 +9,7 @@ namespace Notify.Dal.Repositories
 		Task<NotificatorDal[]> GetAll();
 		Task<NotificatorDal[]> GetList(string nameFilter);
 		Task<NotificatorDal[]> GetForType(NotificationTypeEnum typeId);
-		Task<NotificatorDal> Get(int id);
-		Task<NotificatorDal> GetBySlug(string slug);
-		Task<NotificatorDal> GetByName(string name);
+		Task<NotificatorDal> GetAsync(int id);
+		Task<NotificatorDal> GetBySlugAsync(string slug);
 	}
 }

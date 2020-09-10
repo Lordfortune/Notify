@@ -11,7 +11,7 @@ namespace Notify.Dal.Models
 	{
 		[Column("Id"), Key]
 		public int Id { get; set; }
-		[Column("Name")]
+		[Column("Name"), MaxLength(150)]
 		public string Name { get; set; }
 		[Column("PersonId")]
 		public int? PersonId { get; set; }

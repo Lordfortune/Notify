@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using FT.Extending;
 using Microsoft.AspNetCore;
@@ -12,7 +13,7 @@ namespace Notify.WebApi
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var host = CreateWebHostBuilder(args).Build();
 
@@ -30,6 +31,11 @@ namespace Notify.WebApi
 			}
 
 			host.Run();
+
+			while (true)
+			{
+				await Task.Delay(30000);
+			}
 		}
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

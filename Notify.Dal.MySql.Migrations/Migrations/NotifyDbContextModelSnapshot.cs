@@ -18,6 +18,78 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("Notify.Dal.Models.ClientDal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnName("IsActive");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("Name")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("Slug")
+                        .HasColumnName("Slug")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Token")
+                        .HasColumnName("Token")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Token");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Notify.Dal.Models.ClientNotificatorDal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("NotificatorId")
+                        .HasColumnName("NotificatorId");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("NotificatorId");
+
+                    b.ToTable("ClientNotificators");
+                });
+
             modelBuilder.Entity("Notify.Dal.Models.ContactDal", b =>
                 {
                     b.Property<int>("Id")
@@ -25,13 +97,15 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("CreatedAt");
 
                     b.Property<bool>("IsActive")
                         .HasColumnName("IsActive");
 
                     b.Property<string>("Name")
-                        .HasColumnName("Name");
+                        .HasColumnName("Name")
+                        .HasMaxLength(150);
 
                     b.Property<int?>("PersonId")
                         .HasColumnName("PersonId");
@@ -40,6 +114,7 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         .HasColumnName("TypeId");
 
                     b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
@@ -105,6 +180,7 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("Message")
@@ -117,12 +193,14 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         .HasColumnName("StatusId");
 
                     b.Property<string>("Subject")
-                        .HasColumnName("Subject");
+                        .HasColumnName("Subject")
+                        .HasMaxLength(250);
 
                     b.Property<int>("TypeId")
                         .HasColumnName("TypeId");
 
                     b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
@@ -136,6 +214,61 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                     b.ToTable("Notifications");
 
                     b.HasDiscriminator<int>("TypeId");
+                });
+
+            modelBuilder.Entity("Notify.Dal.Models.NotificationRequestDal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
+
+                    b.Property<string>("ClientToken")
+                        .HasColumnName("ClientToken")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Comment")
+                        .HasColumnName("Comment");
+
+                    b.Property<int>("ContactId")
+                        .HasColumnName("ContactId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<bool?>("IsSuccess")
+                        .HasColumnName("IsSuccess");
+
+                    b.Property<string>("Message")
+                        .HasColumnName("Message");
+
+                    b.Property<string>("Method")
+                        .HasColumnName("Method")
+                        .HasMaxLength(100);
+
+                    b.Property<int?>("NotificationId")
+                        .HasColumnName("NotificationId");
+
+                    b.Property<string>("Notificator")
+                        .HasColumnName("Notificator")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("Subject")
+                        .HasColumnName("Subject")
+                        .HasMaxLength(250);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsSuccess");
+
+                    b.HasIndex("NotificationId")
+                        .IsUnique();
+
+                    b.ToTable("NotificationRequests");
                 });
 
             modelBuilder.Entity("Notify.Dal.Models.NotificationStatusDal", b =>
@@ -227,21 +360,25 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("CreatedAt");
 
                     b.Property<bool>("IsActive")
                         .HasColumnName("IsActive");
 
                     b.Property<string>("Name")
-                        .HasColumnName("Name");
+                        .HasColumnName("Name")
+                        .HasMaxLength(150);
 
                     b.Property<string>("Slug")
-                        .HasColumnName("Slug");
+                        .HasColumnName("Slug")
+                        .HasMaxLength(100);
 
                     b.Property<int>("TypeId")
                         .HasColumnName("TypeId");
 
                     b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
@@ -264,21 +401,26 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("CreatedAt");
 
                     b.Property<string>("FirstName")
-                        .HasColumnName("FirstName");
+                        .HasColumnName("FirstName")
+                        .HasMaxLength(150);
 
                     b.Property<bool>("IsActive")
                         .HasColumnName("IsActive");
 
                     b.Property<string>("LastName")
-                        .HasColumnName("LastName");
+                        .HasColumnName("LastName")
+                        .HasMaxLength(150);
 
                     b.Property<string>("MiddleName")
-                        .HasColumnName("MiddleName");
+                        .HasColumnName("MiddleName")
+                        .HasMaxLength(150);
 
                     b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
@@ -327,6 +469,13 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                     b.HasIndex("Slug");
 
                     b.ToTable("TelegramChatTypes");
+
+                    b.HasData(
+                        new { Id = 1, Name = "Private", Slug = "private" },
+                        new { Id = 2, Name = "Group", Slug = "group" },
+                        new { Id = 3, Name = "Channel", Slug = "channel" },
+                        new { Id = 4, Name = "Supergroup", Slug = "supergroup" }
+                    );
                 });
 
             modelBuilder.Entity("Notify.Dal.Models.Telegram.TelegramNotificatorSettingsDal", b =>
@@ -475,6 +624,19 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
+            modelBuilder.Entity("Notify.Dal.Models.ClientNotificatorDal", b =>
+                {
+                    b.HasOne("Notify.Dal.Models.ClientDal", "Client")
+                        .WithMany("ClientNotificators")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Notify.Dal.Models.NotificatorDal", "Notificator")
+                        .WithMany()
+                        .HasForeignKey("NotificatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Notify.Dal.Models.ContactDal", b =>
                 {
                     b.HasOne("Notify.Dal.Models.PersonDal", "Person")
@@ -503,6 +665,14 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                     b.HasOne("Notify.Dal.Models.NotificationTypeDal", "Type")
                         .WithMany("Notifications")
                         .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Notify.Dal.Models.NotificationRequestDal", b =>
+                {
+                    b.HasOne("Notify.Dal.Models.NotificationDal", "Notification")
+                        .WithOne("Request")
+                        .HasForeignKey("Notify.Dal.Models.NotificationRequestDal", "NotificationId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

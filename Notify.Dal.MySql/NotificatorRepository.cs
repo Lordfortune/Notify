@@ -32,12 +32,12 @@ namespace Notify.Dal.Mysql
 			return InContext(c => c.Notificators.Where(x => x.TypeId == typeId).ToArrayAsync());
 		}
 
-		public Task<NotificatorDal> Get(int id)
+		public Task<NotificatorDal> GetAsync(int id)
 		{
 			return InContext(c => c.Notificators.FirstOrDefaultAsync(x => x.Id == id));
 		}
 
-		public Task<NotificatorDal> GetBySlug(string slug)
+		public Task<NotificatorDal> GetBySlugAsync(string slug)
 		{
 			return InContext(c => c.Notificators.FirstOrDefaultAsync(x => x.Slug == slug));
 		}

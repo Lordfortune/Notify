@@ -25,6 +25,7 @@
     <ProjectReference Include="..\FT.Common\FT.Extending\FT.Extending.csproj" />
     <ProjectReference Include="..\Notify.Bll\Notify.Bll.csproj" />
     <ProjectReference Include="..\Notify.Dal.MySql.Migrations\Notify.Dal.MySql.Migrations.csproj" />
+    <ProjectReference Include="..\Notify.Dto\Notify.Dto.csproj" />
   </ItemGroup>
 
 </Project>

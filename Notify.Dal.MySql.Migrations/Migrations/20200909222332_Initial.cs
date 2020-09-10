@@ -4,10 +4,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Notify.Dal.MySql.Migrations.Migrations
 {
-    public partial class InitialNotify : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 150, nullable: true),
+                    Slug = table.Column<string>(maxLength: 100, nullable: true),
+                    Token = table.Column<string>(maxLength: 100, nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "EmailNotificatorSettings",
                 columns: table => new
@@ -63,12 +83,14 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    MiddleName = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(maxLength: 150, nullable: true),
+                    LastName = table.Column<string>(maxLength: 150, nullable: true),
+                    MiddleName = table.Column<string>(maxLength: 150, nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
                 },
                 constraints: table =>
                 {
@@ -135,12 +157,14 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Slug = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 150, nullable: true),
+                    Slug = table.Column<string>(maxLength: 100, nullable: true),
                     TypeId = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     EmailSettingsId = table.Column<int>(nullable: true),
                     TelegramSettingsId = table.Column<int>(nullable: true)
                 },
@@ -173,12 +197,14 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 150, nullable: true),
                     PersonId = table.Column<int>(nullable: true),
                     TypeId = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     Email = table.Column<string>(nullable: true),
                     ChatId = table.Column<int>(nullable: true),
                     TelegramId = table.Column<long>(nullable: true)
@@ -204,6 +230,37 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         principalTable: "TelegramChatDal",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClientNotificators",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ClientId = table.Column<int>(nullable: false),
+                    NotificatorId = table.Column<int>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientNotificators", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClientNotificators_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClientNotificators_Notificators_NotificatorId",
+                        column: x => x.NotificatorId,
+                        principalTable: "Notificators",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -242,12 +299,14 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     NotificatorContactId = table.Column<int>(nullable: false),
-                    Subject = table.Column<string>(nullable: true),
+                    Subject = table.Column<string>(maxLength: 250, nullable: true),
                     Message = table.Column<string>(nullable: true),
                     TypeId = table.Column<int>(nullable: false),
                     StatusId = table.Column<int>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
                 },
                 constraints: table =>
                 {
@@ -272,6 +331,37 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "NotificationRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ContactId = table.Column<int>(nullable: false),
+                    Notificator = table.Column<string>(maxLength: 150, nullable: true),
+                    ClientToken = table.Column<string>(maxLength: 100, nullable: true),
+                    Method = table.Column<string>(maxLength: 100, nullable: true),
+                    Subject = table.Column<string>(maxLength: 250, nullable: true),
+                    Message = table.Column<string>(nullable: true),
+                    NotificationId = table.Column<int>(nullable: true),
+                    IsSuccess = table.Column<bool>(nullable: true),
+                    Comment = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NotificationRequests_Notifications_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "NotificationStatuses",
                 columns: new[] { "Id", "Description", "Name", "Slug" },
@@ -292,6 +382,42 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                     { 2, "Email", "email" },
                     { 1, "Telegram", "telegram" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "TelegramChatTypes",
+                columns: new[] { "Id", "Name", "Slug" },
+                values: new object[,]
+                {
+                    { 1, "Private", "private" },
+                    { 2, "Group", "group" },
+                    { 3, "Channel", "channel" },
+                    { 4, "Supergroup", "supergroup" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClientNotificators_ClientId",
+                table: "ClientNotificators",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClientNotificators_IsActive",
+                table: "ClientNotificators",
+                column: "IsActive");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClientNotificators_NotificatorId",
+                table: "ClientNotificators",
+                column: "NotificatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_IsActive",
+                table: "Clients",
+                column: "IsActive");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_Token",
+                table: "Clients",
+                column: "Token");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_IsActive",
@@ -328,6 +454,17 @@ namespace Notify.Dal.MySql.Migrations.Migrations
                 name: "IX_EmailNotificatorSettings_IsActive",
                 table: "EmailNotificatorSettings",
                 column: "IsActive");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotificationRequests_IsSuccess",
+                table: "NotificationRequests",
+                column: "IsSuccess");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotificationRequests_NotificationId",
+                table: "NotificationRequests",
+                column: "NotificationId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_NotificatorContactId",
@@ -429,6 +566,15 @@ namespace Notify.Dal.MySql.Migrations.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ClientNotificators");
+
+            migrationBuilder.DropTable(
+                name: "NotificationRequests");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
+
             migrationBuilder.DropTable(
                 name: "Notifications");
 

@@ -13,27 +13,25 @@ namespace Notify.WebApi.Controllers
 	{
 		public NotificatorController(
 			INotificatorRepository repository,
-			NotifyListenersManager manager)
+			NotificatorsManagerService manager)
 		{
 			_manager = manager;
 			_repository = repository;
 		}
 
 		private readonly INotificatorRepository _repository;
-		private readonly NotifyListenersManager _manager;
+		private readonly NotificatorsManagerService _manager;
 
 		[HttpGet("{id}")]
 		public Task<NotificatorDal> Get([FromRoute] int id)
 		{
-			return _repository.Get(id);
+			return _repository.GetAsync(id);
 		}
 
 		[HttpPost("send")]
-		public async Task<NotificatorDal> Send(SendMessageDto request)
+		public async Task Send(SendMessageDto request)
 		{
-			_manager.Send(request);
-			var notificator = await _repository.Get(request.NotificatorId);
-			return notificator;
+			await _manager.Send(request);
 		}
 	}
 }

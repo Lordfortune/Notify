@@ -1,7 +1,9 @@
+using System.Runtime.Serialization;
 using Notify.Common.Enums;
 
 namespace Notify.Common.Dto
 {
+	[DataContract]
 	public class ApiResponse
 	{
 		public ApiResponse()
@@ -20,10 +22,13 @@ namespace Notify.Common.Dto
 			Message = message;
 		}
 
+		[DataMember(Name = "message")]
 		public string Message { get; set; }
+		[DataMember(Name = "code")]
 		public int Code { get; set; }
 	}
 
+	[DataContract]
 	public class ApiResponse<T> : ApiResponse
 	{
 		public ApiResponse(T data) : base(ResponseCodeEnum.Success)
@@ -31,6 +36,7 @@ namespace Notify.Common.Dto
 			Data = data;
 		}
 
+		[DataMember(Name = "data")]
 		public T Data { get; set; }
 	}
 }

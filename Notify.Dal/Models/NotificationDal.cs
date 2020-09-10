@@ -30,6 +30,7 @@ namespace Notify.Dal.Models
 
 		public NotificationTypeDal Type { get; set; }
 		public NotificationStatusDal Status { get; set; }
+		public NotificationRequestDal Request { get; set; }
 		public NotificatorContactDal NotificatorContact { get; set; }
 	}
 }

@@ -74,8 +74,13 @@ namespace Notify.WebApi
 
 			context.Response.Body = existingBody;
 			var newContent = resp.ToJson();
-			context.Response.StatusCode = 200;
-			context.Response.ContentLength = newContent.Length;
+
+			if (context.Response.StatusCode != 200)
+			{
+				context.Response.StatusCode = 200;
+				context.Response.ContentLength = newContent.Length;
+			}
+
 			await context.Response.WriteAsync(newContent);
 		}
 	}

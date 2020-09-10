@@ -2,12 +2,14 @@ using System;
 using System.Linq;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Notify.Bll.Mappers;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Notify.WebApi
@@ -25,8 +27,8 @@ namespace Notify.WebApi
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
-
 			services
+				.AddAutoMapper(typeof(NotifyMapperProfile))
 				.ConfigureDatabase(Configuration)
 				.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 					{

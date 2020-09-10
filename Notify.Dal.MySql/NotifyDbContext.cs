@@ -1,4 +1,6 @@
+using System;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.EntityFrameworkCore.Extensions;
 using Notify.Dal.Models;
 using Notify.Common.Enums;
 using Notify.Dal.Models.Email;
@@ -31,9 +33,13 @@ namespace Notify.Dal.Mysql
 
 		private readonly string _connectionString;
 
+		public DbSet<ClientDal> Clients { get; set; }
 		public DbSet<ContactDal> Contacts { get; set; }
 		public DbSet<NotificatorDal> Notificators { get; set; }
+		public DbSet<NotificationDal> Notifications { get; set; }
+		public DbSet<NotificationRequestDal> Requests { get; set; }
 		public DbSet<NotificationTypeDal> NotificationTypes { get; set; }
+		public DbSet<NotificatorContactDal> NotificatorContacts { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -45,6 +51,12 @@ namespace Notify.Dal.Mysql
 			{
 				builder.HasKey(x => x.Id);
 				builder.HasIndex(x => x.IsActive);
+
+				builder.Property(x => x.FirstName).HasMaxLength(150);
+				builder.Property(x => x.LastName).HasMaxLength(150);
+				builder.Property(x => x.MiddleName).HasMaxLength(150);
+				builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
+				builder.Property(x => x.UpdatedAt).ValueGeneratedOnAddOrUpdate();
 
 				builder
 					.HasMany(x => x.Contacts)
@@ -59,6 +71,10 @@ namespace Notify.Dal.Mysql
 				builder.HasIndex(x => x.TypeId);
 				builder.HasIndex(x => x.PersonId);
 				builder.HasIndex(x => x.IsActive);
+
+				builder.Property(x => x.Name).HasMaxLength(150);
+				builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
+				builder.Property(x => x.UpdatedAt).ValueGeneratedOnAddOrUpdate();
 
 				builder.HasOne(x => x.Person)
 					.WithMany(x => x.Contacts)
@@ -90,6 +106,11 @@ namespace Notify.Dal.Mysql
 				builder.HasIndex(x => x.TypeId);
 				builder.HasIndex(x => x.IsActive);
 
+				builder.Property(x => x.Name).HasMaxLength(150);
+				builder.Property(x => x.Slug).HasMaxLength(100);
+				builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
+				builder.Property(x => x.UpdatedAt).ValueGeneratedOnAddOrUpdate();
+
 				builder
 					.HasOne(x => x.Type)
 					.WithMany(x => x.Notificators)
@@ -114,6 +135,10 @@ namespace Notify.Dal.Mysql
 				builder.HasIndex(x => x.StatusId);
 				builder.HasIndex(x => x.NotificatorContactId);
 
+				builder.Property(x => x.Subject).HasMaxLength(250);
+				builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
+				builder.Property(x => x.UpdatedAt).ValueGeneratedOnAddOrUpdate();
+
 				builder
 					.HasOne(x => x.Type)
 					.WithMany(x => x.Notifications)
@@ -135,9 +160,51 @@ namespace Notify.Dal.Mysql
 					.HasPrincipalKey(x => x.Id)
 					.OnDelete(DeleteBehavior.Restrict);
 
+				builder
+					.HasOne(x => x.Request)
+					.WithOne(x => x.Notification)
+					.HasForeignKey<NotificationRequestDal>(x => x.NotificationId)
+					.HasPrincipalKey<NotificationDal>(x => x.Id)
+					.OnDelete(DeleteBehavior.Restrict);
+
 				builder.HasDiscriminator(x => x.TypeId)
 					.HasValue<TelegramNotificationDal>(NotificationTypeEnum.Telegram)
 					.HasValue<EmailNotificationDal>(NotificationTypeEnum.Email);
+			});
+			modelBuilder.Entity<ClientDal>(builder =>
+			{
+				builder.HasKey(x => x.Id);
+				builder.HasIndex(x => x.Token);
+				builder.HasIndex(x => x.IsActive);
+
+				builder.Property(x => x.Name).HasMaxLength(150);
+				builder.Property(x => x.Slug).HasMaxLength(100);
+				builder.Property(x => x.Token).HasMaxLength(100);
+
+				builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
+				builder.Property(x => x.UpdatedAt).ValueGeneratedOnAddOrUpdate();
+			});
+			modelBuilder.Entity<ClientNotificatorDal>(builder =>
+			{
+				builder.HasKey(x => x.Id);
+				builder.HasIndex(x => x.IsActive);
+				builder.HasIndex(x => x.ClientId);
+				builder.HasIndex(x => x.NotificatorId);
+
+				builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
+				builder.Property(x => x.UpdatedAt).ValueGeneratedOnAddOrUpdate();
+
+				builder
+					.HasOne(x => x.Client)
+					.WithMany(x => x.ClientNotificators)
+					.HasForeignKey(x => x.ClientId)
+					.HasPrincipalKey(x => x.Id);
+
+				builder
+					.HasOne(x => x.Notificator)
+					.WithMany()
+					.HasForeignKey(x => x.NotificatorId)
+					.HasPrincipalKey(x => x.Id);
 			});
 			modelBuilder.Entity<NotificationTypeDal>(builder =>
 			{
@@ -180,11 +247,11 @@ namespace Notify.Dal.Mysql
 					.HasPrincipalKey(x => x.Id)
 					.OnDelete(DeleteBehavior.Restrict);
 
-				builder.HasData(new NotificationStatusDal { Id = NotificationStatusEnum.Created, Name = "Created", Slug = "created", Description = "Создано" });
-				builder.HasData(new NotificationStatusDal { Id = NotificationStatusEnum.Processing, Name = "Processing", Slug = "processing", Description = "В обработке" });
-				builder.HasData(new NotificationStatusDal { Id = NotificationStatusEnum.Sent, Name = "Sent", Slug = "sent", Description = "Отправлено" });
-				builder.HasData(new NotificationStatusDal { Id = NotificationStatusEnum.Retry, Name = "Retry", Slug = "retry", Description = "Повторить" });
-				builder.HasData(new NotificationStatusDal { Id = NotificationStatusEnum.Error, Name = "Error", Slug = "error", Description = "Ошибка" });
+				builder.HasData(new NotificationStatusDal { Id = NotificationStatusEnum.Created, Name = "Created", Slug = "created", Description = "Создано" },
+					new NotificationStatusDal { Id = NotificationStatusEnum.Processing, Name = "Processing", Slug = "processing", Description = "В обработке" },
+					new NotificationStatusDal { Id = NotificationStatusEnum.Sent, Name = "Sent", Slug = "sent", Description = "Отправлено" },
+					new NotificationStatusDal { Id = NotificationStatusEnum.Retry, Name = "Retry", Slug = "retry", Description = "Повторить" },
+					new NotificationStatusDal { Id = NotificationStatusEnum.Error, Name = "Error", Slug = "error", Description = "Ошибка" });
 			});
 			modelBuilder.Entity<NotificatorContactDal>(builder =>
 			{
@@ -212,6 +279,26 @@ namespace Notify.Dal.Mysql
 					.WithOne(x => x.NotificatorContact)
 					.HasForeignKey(x => x.NotificatorContactId)
 					.HasPrincipalKey(x => x.Id)
+					.OnDelete(DeleteBehavior.Restrict);
+			});
+			modelBuilder.Entity<NotificationRequestDal>(builder =>
+			{
+				builder.HasKey(x => x.Id);
+
+				builder.HasIndex(x => x.IsSuccess);
+				builder.HasIndex(x => x.NotificationId);
+
+				builder.Property(x => x.Method).HasMaxLength(100);
+				builder.Property(x => x.ClientToken).HasMaxLength(100);
+				builder.Property(x => x.Notificator).HasMaxLength(150);
+				builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
+				builder.Property(x => x.UpdatedAt).ValueGeneratedOnAddOrUpdate();
+
+				builder
+					.HasOne(x => x.Notification)
+					.WithOne(x => x.Request)
+					.HasForeignKey<NotificationRequestDal>(x => x.NotificationId)
+					.HasPrincipalKey<NotificationDal>(x => x.Id)
 					.OnDelete(DeleteBehavior.Restrict);
 			});
 
